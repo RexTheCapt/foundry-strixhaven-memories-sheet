@@ -27,10 +27,11 @@ export const CLUB_NAMES = [
   "Live-Action Roleplaying Guild"
 ];
 
+/** In dropdown order: partner first, then from the highest points to the lowest. */
 export const RELATIONSHIP_TYPES = [
+  { value: "partner", label: "STRIXHAVEN_MEMORIES.Relationships.Partner" },
   { value: "friend", label: "STRIXHAVEN_MEMORIES.Relationships.Friend" },
   { value: "neutral", label: "STRIXHAVEN_MEMORIES.Relationships.Neutral" },
-  { value: "partner", label: "STRIXHAVEN_MEMORIES.Relationships.Partner" },
   { value: "rival", label: "STRIXHAVEN_MEMORIES.Relationships.Rival" }
 ];
 

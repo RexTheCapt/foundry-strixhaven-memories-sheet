@@ -124,3 +124,8 @@ test("every value a long rest changes has a name for the chat message", () => {
   assert.equal(restLabel("system.attributes.hp.value"), undefined);
   assert.equal(restLabel("flags.other-module.relationships.r1.inspiration"), undefined);
 });
+
+test("the relationship dropdown lists partner first, then by points", () => {
+  assert.deepEqual(prepare().relationships[0].relationshipOptions.map(o => o.value),
+    ["partner", "friend", "neutral", "rival"]);
+});

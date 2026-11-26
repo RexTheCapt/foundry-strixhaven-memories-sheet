@@ -29,10 +29,11 @@
                     <td>
                         <select class="sm-relationship" name="{{ path }}.relationship"
                                 aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Relationship' }} {{ number }}">
-                            <option value=""></option>
                             {{#each relationshipOptions}}
                             <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{#if label}}{{ localize label }}{{else}}{{ text }}{{/if}}</option>
                             {{/each}}
+                            {{!-- Selected explicitly, or an unset row would show the first relationship. --}}
+                            <option value="" {{#unless relationship}}selected{{/unless}}></option>
                         </select>
                     </td>
                     <td class="sm-center">
