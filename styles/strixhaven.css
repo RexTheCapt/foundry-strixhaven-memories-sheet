@@ -120,6 +120,21 @@
     }
 
     & dnd5e-checkbox { justify-self: center; margin-bottom: 0.3rem; }
+
+    & .sm-club {
+      display: flex;
+      align-items: end;
+      gap: 0.125rem;
+
+      & textarea { flex: 1; min-width: 0; }
+    }
+
+    & .sm-club-picker {
+      flex: none;
+      width: 1.5rem;
+      height: 1.75rem;
+      padding: 0;
+    }
   }
 
   & .sm-captions,
@@ -140,4 +155,9 @@
     & label { display: flex; flex-direction: column; justify-content: end; gap: 0.125rem; }
     & .sm-wide { grid-column: 1 / -1; }
   }
+}
+
+.strixhaven-extracurricular-config textarea {
+  width: 100%;
+  resize: vertical;
 }

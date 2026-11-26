@@ -28,6 +28,22 @@ https://github.com/RexTheCapt/foundry-strixhaven-memories-sheet/releases/latest/
 
 Then enable **Strixhaven Memories Sheet** under **Manage Modules** in your world.
 
+## Extracurricular picker
+
+The module ships without any book content, so you supply the list of extracurriculars yourself. As GM,
+open **Configure Settings → Strixhaven Memories Sheet → Edit List** and paste it in this form:
+
+```
+Teapot Society
+Skills: History, Insight
+Member: Ada Example, Bo Sample
+An optional description, shown as a tooltip on the sheet.
+```
+
+Repeat for each entry. Page references such as `p45` and any introduction before the first name are
+ignored. Each extracurricular row on the sheet then gets a dropdown that fills in Name, Skills and
+Member. The fields stay editable, and you can still type your own.
+
 ## Data
 
 Values are stored on the actor under `flags.strixhaven-memories-sheet`, so they travel with actor

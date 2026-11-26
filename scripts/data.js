@@ -13,9 +13,10 @@ const count = length => Array.from({ length }, (_, i) => i + 1);
  * Rows are keyed objects (r1, y1.e1, c1) rather than arrays, so that Foundry's
  * form handling merges them into the actor without replacing neighbouring rows.
  * @param {object} [data]  The module's flags on the actor.
+ * @param {object[]} [clubs]  Extracurriculars offered in the picker, from `parseClubs`.
  * @returns {object}       Template context. Each `path` is the form field prefix for that row.
  */
-export function prepareStrixhaven(data = {}) {
+export function prepareStrixhaven(data = {}, clubs = []) {
   const root = `flags.${MODULE_ID}`;
   return {
     relationships: count(RELATIONSHIP_ROWS).map(n => ({
@@ -36,9 +37,11 @@ export function prepareStrixhaven(data = {}) {
     entriesPerYear: ENTRIES_PER_YEAR,
     extracurriculars: count(EXTRACURRICULAR_ROWS).map(n => ({
       ...data.extracurriculars?.[`c${n}`],
+      description: clubs.find(c => c.name === data.extracurriculars?.[`c${n}`]?.name)?.description,
       number: n,
       path: `${root}.extracurriculars.c${n}`
     })),
+    clubs,
     job: {
       ...data.job,
       path: `${root}.job`

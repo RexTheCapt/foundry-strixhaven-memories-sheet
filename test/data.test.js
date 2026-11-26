@@ -34,7 +34,8 @@ test("the module id matches the manifest", () => {
 
 test("every localization key used by the module exists", () => {
   const lang = JSON.parse(read("lang/en.json"));
-  const source = read("templates/strixhaven-tab.hbs") + read("scripts/module.js");
+  const source = ["templates/strixhaven-tab.hbs", "templates/extracurricular-config.hbs", "scripts/module.js",
+    "scripts/extracurricular-config.js"].map(read).join("\n");
   const keys = new Set(source.match(/STRIXHAVEN_MEMORIES(\.\w+)+/g));
   assert.ok(keys.size > 0);
   for ( const key of keys ) {

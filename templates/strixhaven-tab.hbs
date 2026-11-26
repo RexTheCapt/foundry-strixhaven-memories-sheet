@@ -90,8 +90,19 @@
         <ul class="unlist sm-extracurriculars">
             {{#each strixhaven.extracurriculars}}
             <li class="sm-row">
-                <textarea class="sm-line" name="{{ path }}.name" rows="1"
-                          aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Name' }} {{ number }}">{{ name }}</textarea>
+                <div class="sm-club">
+                    <textarea class="sm-line" name="{{ path }}.name" rows="1" {{#if description}}data-tooltip-text="{{ description }}"{{/if}}
+                              aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Name' }} {{ number }}">{{ name }}</textarea>
+                    {{#if @root.strixhaven.clubs.length}}
+                    <select class="sm-club-picker" data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Choose' }}"
+                            aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Choose' }} {{ number }}">
+                        <option value="" selected></option>
+                        {{#each @root.strixhaven.clubs}}
+                        <option value="{{ name }}">{{ name }} ({{ skills }})</option>
+                        {{/each}}
+                    </select>
+                    {{/if}}
+                </div>
                 <dnd5e-checkbox name="{{ path }}.d4" {{#if d4}}checked{{/if}}
                                 aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.D4' }} {{ number }}"></dnd5e-checkbox>
                 <textarea class="sm-line" name="{{ path }}.skills" rows="1"

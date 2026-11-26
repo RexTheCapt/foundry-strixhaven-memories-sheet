@@ -22,13 +22,23 @@
       "Name": "Name",
       "D4": "d4",
       "Skills": "Skills",
-      "Member": "Member"
+      "Member": "Member",
+      "Choose": "Choose an extracurricular"
     },
     "Job": {
       "Title": "Job",
       "Employer": "Employer",
       "Job": "Job",
       "Coworker": "Coworker"
+    },
+    "Config": {
+      "Title": "Extracurricular Options",
+      "Button": "Edit List",
+      "Hint": "The extracurriculars players can pick on the Strixhaven tab.",
+      "Instructions": "Paste your list here. Each entry needs a name line followed by a \"Skills:\" line. A \"Member:\" line and a description are optional. Page references such as \"p45\" are ignored.",
+      "Save": "Save",
+      "Saved": "Saved {count} extracurriculars.",
+      "NoneFound": "No extracurriculars were found. Each entry needs a name line followed by a \"Skills:\" line."
     }
   }
 }
