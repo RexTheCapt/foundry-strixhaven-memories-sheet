@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Strixhaven tab for the D&D 5e character sheet in Foundry VTT",
+  "license": "MIT",
   "scripts": {
     "test": "node --test"
   }

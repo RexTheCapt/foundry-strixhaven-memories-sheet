@@ -20,9 +20,13 @@ They can be edited in both play and edit mode, and are read-only for anyone who 
 
 ## Installation
 
-Copy `module.json`, `scripts/`, `templates/`, `styles/` and `lang/` into
-`<Foundry user data>/Data/modules/strixhaven-memories-sheet/`. The folder name must match the
-module id. Restart Foundry, then enable **Strixhaven Memories Sheet** under **Manage Modules**.
+In Foundry's **Add-on Modules** tab choose **Install Module** and paste this manifest URL:
+
+```
+https://github.com/RexTheCapt/foundry-strixhaven-memories-sheet/releases/latest/download/module.json
+```
+
+Then enable **Strixhaven Memories Sheet** under **Manage Modules** in your world.
 
 ## Data
 
