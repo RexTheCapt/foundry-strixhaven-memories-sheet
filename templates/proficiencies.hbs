@@ -1,0 +1,12 @@
+<multi-select name="{{ path }}.proficiencies" aria-label="{{ label }}">
+    <optgroup label="{{ localize 'STRIXHAVEN_MEMORIES.Proficiencies.Skills' }}">
+        {{#each choices.skills}}
+        <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{ label }}</option>
+        {{/each}}
+    </optgroup>
+    <optgroup label="{{ localize 'STRIXHAVEN_MEMORIES.Proficiencies.Tools' }}">
+        {{#each choices.tools}}
+        <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{ label }}</option>
+        {{/each}}
+    </optgroup>
+</multi-select>

@@ -1,10 +1,10 @@
-import { parseClubs } from "./clubs.js";
-import { MODULE_ID, prepareStrixhaven } from "./data.js";
-import { CLUBS_SETTING, ExtracurricularConfig } from "./extracurricular-config.js";
+import { CLUBS_SETTING, readSheet } from "./actor.js";
+import { MODULE_ID } from "./data.js";
+import { ExtracurricularConfig } from "./extracurricular-config.js";
+import { registerRollHooks } from "./rolls.js";
+import { activateTab } from "./sheet.js";
 
 const TAB_ID = "strixhaven";
-
-const getClubs = () => parseClubs(game.settings.get(MODULE_ID, CLUBS_SETTING));
 
 Hooks.once("init", () => {
   const Sheet = globalThis.dnd5e?.applications?.actor?.CharacterActorSheet;
@@ -36,6 +36,7 @@ Hooks.once("init", () => {
   Sheet.PARTS[TAB_ID] = {
     container: { classes: ["tab-body"], id: "tabs" },
     template: `modules/${MODULE_ID}/templates/strixhaven-tab.hbs`,
+    templates: [`modules/${MODULE_ID}/templates/proficiencies.hbs`],
     scrollable: [""]
   };
 
@@ -49,22 +50,9 @@ Hooks.once("init", () => {
 });
 
 Hooks.on("dnd5e.prepareSheetContext", (sheet, partId, context) => {
-  if ( partId !== TAB_ID ) return;
-  // Source data, so that effects applied to the actor are never written back by the form.
-  context.strixhaven = prepareStrixhaven(sheet.actor._source.flags?.[MODULE_ID], getClubs());
+  if ( partId === TAB_ID ) context.strixhaven = readSheet(sheet.actor);
 });
 
-// Picking an extracurricular fills its row. The change event then reaches the sheet's form, which saves it.
-Hooks.on("renderCharacterActorSheet", (sheet, element) => {
-  for ( const picker of element.querySelectorAll("select.sm-club-picker") ) {
-    picker.onchange = () => {
-      const club = getClubs().find(c => c.name === picker.value);
-      picker.value = "";
-      if ( !club ) return;
-      const row = picker.closest(".sm-row");
-      for ( const key of ["name", "skills", "member"] ) {
-        row.querySelector(`textarea[name$=".${key}"]`).value = club[key];
-      }
-    };
-  }
-});
+Hooks.on("renderCharacterActorSheet", activateTab);
+
+registerRollHooks();

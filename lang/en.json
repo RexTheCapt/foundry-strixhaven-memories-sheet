@@ -7,7 +7,11 @@
       "Points": "Points",
       "Relationship": "Relationship",
       "Inspiration": "Inspiration",
-      "BoonBane": "Boon/Bane"
+      "BoonBane": "Boon/Bane",
+      "Friend": "Friend",
+      "Neutral": "Neutral",
+      "Partner": "Partner",
+      "Rival": "Rival"
     },
     "ReportCards": {
       "Title": "Report Cards",
@@ -23,7 +27,8 @@
       "D4": "d4",
       "Skills": "Skills",
       "Member": "Member",
-      "Choose": "Choose an extracurricular"
+      "Add": "Add extracurricular",
+      "Remove": "Remove extracurricular"
     },
     "Job": {
       "Title": "Job",
@@ -34,11 +39,21 @@
     "Config": {
       "Title": "Extracurricular Options",
       "Button": "Edit List",
-      "Hint": "The extracurriculars players can pick on the Strixhaven tab.",
+      "Hint": "Skills, members and descriptions used to fill in an extracurricular when a player picks it.",
       "Instructions": "Paste your list here. Each entry needs a name line followed by a \"Skills:\" line. A \"Member:\" line and a description are optional. Page references such as \"p45\" are ignored.",
       "Save": "Save",
       "Saved": "Saved {count} extracurriculars.",
       "NoneFound": "No extracurriculars were found. Each entry needs a name line followed by a \"Skills:\" line."
+    },
+    "Proficiencies": {
+      "Skills": "Skills",
+      "Tools": "Tools"
+    },
+    "Dice": {
+      "Title": "Strixhaven d4s",
+      "Available": "d4 available",
+      "Report": "Report card: Year {year} #{number} ({left} left)",
+      "Club": "{name}"
     }
   }
 }

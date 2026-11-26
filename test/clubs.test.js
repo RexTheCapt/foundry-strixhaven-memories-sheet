@@ -49,8 +49,7 @@ test("empty or unrecognised text gives no entries", () => {
 
 test("a row naming a listed entry gets its description", () => {
   const clubs = parseClubs(list);
-  const sheet = prepareStrixhaven({ extracurriculars: { c2: { name: "Teapot Society" } } }, clubs);
+  const sheet = prepareStrixhaven({ extracurriculars: { c2: { name: "Teapot Society" } } }, { clubs });
   assert.equal(sheet.extracurriculars[1].description, "They brew tea. They also drink it.");
   assert.equal(sheet.extracurriculars[0].description, undefined);
-  assert.equal(sheet.clubs.length, 2);
 });

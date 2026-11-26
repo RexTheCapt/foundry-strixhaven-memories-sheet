@@ -5,13 +5,34 @@ standard D&D 5e character sheet, as a new **Strixhaven** tab (graduation cap ico
 
 | Section | Fields | Rows |
 | --- | --- | --- |
-| Relationships | Name, Points, Relationship, Inspiration (checkbox), Boon/Bane | 8 |
+| Relationships | Name, Points, Relationship, Inspiration, Boon/Bane | 8 |
 | Report Cards | Rerolls, d4s, Skills | Years 1 to 4, entries #1 to #3 |
-| Extracurriculars | Name, d4 (checkbox), Skills, Member | 2 |
+| Extracurriculars | Name, d4, Skills, Member | 2 to start, add and remove as you like |
 | Job | Employer, Job, Coworker | 1 |
 
-The fields are record keeping only: nothing is rolled or applied to the character automatically.
-They can be edited in both play and edit mode, and are read-only for anyone who cannot edit the actor.
+The fields can be edited in both play and edit mode, and are read-only for anyone who cannot edit the
+actor.
+
+## Rules
+
+**Relationships.** Points run from -5 to +5, green when positive and red when negative. Boon/Bane is
+free text for the DM's choice at +2 or -2; nothing is applied automatically. The relationship is
+Friend, Neutral, Partner or Rival. Choosing Partner ticks Inspiration. Spend it as you would normal
+inspiration, by unticking it.
+
+**Report cards.** Each entry holds 0, 1 or 2 d4s and any number of skills and tools. Each d4 can be
+used once per day on a check with one of them.
+
+**Extracurriculars.** Each one is chosen from a list and cannot be picked twice. Its d4 can be used
+once per day on a check with one of its skills or tools.
+
+**Using a d4.** When you roll a matching skill or tool check, the roll dialog lists the available d4s
+under **Strixhaven d4s**. Tick the ones to add; dice from different rows stack. They are marked as
+used once the check is rolled. A ticked box on the sheet means the die is available, and you can tick
+or untick it by hand. Rolls that skip the dialog (such as Shift-click) do not offer d4s.
+
+**Long rest.** All d4s become available again, and Inspiration is ticked for Partners and unticked for
+everyone else.
 
 ## Requirements
 
@@ -28,10 +49,11 @@ https://github.com/RexTheCapt/foundry-strixhaven-memories-sheet/releases/latest/
 
 Then enable **Strixhaven Memories Sheet** under **Manage Modules** in your world.
 
-## Extracurricular picker
+## Extracurricular details
 
-The module ships without any book content, so you supply the list of extracurriculars yourself. As GM,
-open **Configure Settings → Strixhaven Memories Sheet → Edit List** and paste it in this form:
+The module ships without any book content. To have Skills and Member filled in when a player picks an
+extracurricular, the GM opens **Configure Settings → Strixhaven Memories Sheet → Edit List** and pastes
+the details in this form:
 
 ```
 Teapot Society
@@ -40,9 +62,9 @@ Member: Ada Example, Bo Sample
 An optional description, shown as a tooltip on the sheet.
 ```
 
-Repeat for each entry. Page references such as `p45` and any introduction before the first name are
-ignored. Each extracurricular row on the sheet then gets a dropdown that fills in Name, Skills and
-Member. The fields stay editable, and you can still type your own.
+Repeat for each entry, using the names from the sheet's dropdown (a leading "Strixhaven" or a trailing
+"Club" may differ). Page references such as `p45` and any introduction before the first name are
+ignored. Without this list, players choose the skills and tools themselves.
 
 ## Data
 

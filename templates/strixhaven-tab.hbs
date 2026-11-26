@@ -21,12 +21,18 @@
                                   aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Name' }} {{ number }}">{{ name }}</textarea>
                     </td>
                     <td class="sm-center">
-                        <input type="number" class="sm-points" name="{{ path }}.points" value="{{ points }}" step="1"
+                        <input type="number" class="sm-points {{ tone }}" name="{{ path }}.points" value="{{ points }}"
+                               min="-5" max="5" step="1"
                                aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Points' }} {{ number }}">
                     </td>
                     <td>
-                        <textarea name="{{ path }}.relationship" rows="1"
-                                  aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Relationship' }} {{ number }}">{{ relationship }}</textarea>
+                        <select class="sm-relationship" name="{{ path }}.relationship"
+                                aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Relationship' }} {{ number }}">
+                            <option value=""></option>
+                            {{#each relationshipOptions}}
+                            <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{#if label}}{{ localize label }}{{else}}{{ text }}{{/if}}</option>
+                            {{/each}}
+                        </select>
                     </td>
                     <td class="sm-center">
                         <dnd5e-checkbox name="{{ path }}.inspiration" {{#if inspiration}}checked{{/if}}
@@ -70,12 +76,25 @@
                                aria-label="{{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Year' }} {{ year }} #{{ number }} {{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Rerolls' }}">
                     </td>
                     <td>
-                        <input type="number" class="sm-line" name="{{ path }}.d4s" value="{{ d4s }}" min="0" step="1"
-                               aria-label="{{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Year' }} {{ year }} #{{ number }} {{ localize 'STRIXHAVEN_MEMORIES.ReportCards.D4s' }}">
+                        <div class="sm-dice">
+                            <select class="sm-dice-count" name="{{ path }}.d4s" data-dtype="Number"
+                                    aria-label="{{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Year' }} {{ year }} #{{ number }} {{ localize 'STRIXHAVEN_MEMORIES.ReportCards.D4s' }}">
+                                {{#each d4Options}}
+                                <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{ value }}</option>
+                                {{/each}}
+                            </select>
+                            <input type="hidden" name="{{ path }}.spent" value="{{ spent }}" data-dtype="Number">
+                            {{#each dice}}
+                            <dnd5e-checkbox class="sm-die" {{#if available}}checked{{/if}}
+                                            data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Dice.Available' }}"
+                                            aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Dice.Available' }} {{ number }}"></dnd5e-checkbox>
+                            {{/each}}
+                        </div>
                     </td>
                     <td>
-                        <textarea class="sm-line" name="{{ path }}.skills" rows="1"
-                                  aria-label="{{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Year' }} {{ year }} #{{ number }} {{ localize 'STRIXHAVEN_MEMORIES.ReportCards.Skills' }}">{{ skills }}</textarea>
+                        {{> "modules/strixhaven-memories-sheet/templates/proficiencies.hbs" path=path choices=choices
+                            label=(localize "STRIXHAVEN_MEMORIES.ReportCards.Skills")}}
+                        {{#if note}}<span class="sm-note">{{ note }}</span>{{/if}}
                     </td>
                 </tr>
                 {{/each}}
@@ -90,25 +109,29 @@
         <ul class="unlist sm-extracurriculars">
             {{#each strixhaven.extracurriculars}}
             <li class="sm-row">
-                <div class="sm-club">
-                    <textarea class="sm-line" name="{{ path }}.name" rows="1" {{#if description}}data-tooltip-text="{{ description }}"{{/if}}
-                              aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Name' }} {{ number }}">{{ name }}</textarea>
-                    {{#if @root.strixhaven.clubs.length}}
-                    <select class="sm-club-picker" data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Choose' }}"
-                            aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Choose' }} {{ number }}">
-                        <option value="" selected></option>
-                        {{#each @root.strixhaven.clubs}}
-                        <option value="{{ name }}">{{ name }} ({{ skills }})</option>
-                        {{/each}}
-                    </select>
-                    {{/if}}
-                </div>
+                <select class="sm-club-name" name="{{ path }}.name" data-previous="{{ name }}"
+                        {{#if description}}data-tooltip-text="{{ description }}"{{/if}}
+                        aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Name' }} {{ number }}">
+                    <option value=""></option>
+                    {{#each nameOptions}}
+                    <option value="{{ value }}" {{#if selected}}selected{{/if}} {{#if disabled}}disabled{{/if}}>{{ value }}</option>
+                    {{/each}}
+                </select>
                 <dnd5e-checkbox name="{{ path }}.d4" {{#if d4}}checked{{/if}}
+                                data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Dice.Available' }}"
                                 aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.D4' }} {{ number }}"></dnd5e-checkbox>
-                <textarea class="sm-line" name="{{ path }}.skills" rows="1"
-                          aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Skills' }} {{ number }}">{{ skills }}</textarea>
+                <div>
+                    {{> "modules/strixhaven-memories-sheet/templates/proficiencies.hbs" path=path choices=choices
+                        label=(localize "STRIXHAVEN_MEMORIES.Extracurriculars.Skills")}}
+                    {{#if note}}<span class="sm-note">{{ note }}</span>{{/if}}
+                </div>
                 <textarea class="sm-line" name="{{ path }}.member" rows="1"
                           aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Member' }} {{ number }}">{{ member }}</textarea>
+                <button type="button" class="unbutton sm-remove-club" data-id="{{ id }}"
+                        data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Remove' }}"
+                        aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Extracurriculars.Remove' }} {{ number }}">
+                    <i class="fa-solid fa-trash" inert></i>
+                </button>
             </li>
             {{/each}}
             <li class="sm-row sm-captions" aria-hidden="true">
@@ -118,6 +141,12 @@
                 <span>{{ localize "STRIXHAVEN_MEMORIES.Extracurriculars.Member" }}</span>
             </li>
         </ul>
+        {{#if strixhaven.canAddClub}}
+        <button type="button" class="sm-add-club">
+            <i class="fa-solid fa-plus" inert></i>
+            <span>{{ localize "STRIXHAVEN_MEMORIES.Extracurriculars.Add" }}</span>
+        </button>
+        {{/if}}
     </div>
 
     {{!-- Job --}}

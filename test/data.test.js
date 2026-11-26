@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { MODULE_ID, prepareStrixhaven } from "../scripts/data.js";
 
 const read = file => readFileSync(new URL(`../${file}`, import.meta.url), "utf8");
@@ -23,6 +23,7 @@ test("stored values land in their own rows, including zero and negative numbers"
   assert.equal(sheet.relationships[2].points, -2);
   assert.equal(sheet.relationships[1].name, undefined);
   assert.equal(sheet.years[1].entries[2].rerolls, 0);
+  assert.equal(sheet.years[1].entries[2].left, 2);
   assert.equal(sheet.years[1].entries[2].path, `flags.${MODULE_ID}.reportCards.y2.e3`);
   assert.equal(sheet.extracurriculars[1].d4, true);
   assert.equal(sheet.job.employer, "Bow's End Tavern");
@@ -34,8 +35,8 @@ test("the module id matches the manifest", () => {
 
 test("every localization key used by the module exists", () => {
   const lang = JSON.parse(read("lang/en.json"));
-  const source = ["templates/strixhaven-tab.hbs", "templates/extracurricular-config.hbs", "scripts/module.js",
-    "scripts/extracurricular-config.js"].map(read).join("\n");
+  const source = ["templates", "scripts"].flatMap(dir =>
+    readdirSync(new URL(`../${dir}`, import.meta.url)).map(file => read(`${dir}/${file}`))).join("\n");
   const keys = new Set(source.match(/STRIXHAVEN_MEMORIES(\.\w+)+/g));
   assert.ok(keys.size > 0);
   for ( const key of keys ) {

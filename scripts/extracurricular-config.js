@@ -1,11 +1,10 @@
+import { CLUBS_SETTING } from "./actor.js";
 import { parseClubs } from "./clubs.js";
 import { MODULE_ID } from "./data.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export const CLUBS_SETTING = "extracurriculars";
-
-/** Settings window where the GM pastes the list of extracurriculars offered in the sheet's picker. */
+/** Settings window where the GM pastes the extracurricular details used to fill in sheet rows. */
 export class ExtracurricularConfig extends HandlebarsApplicationMixin(ApplicationV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
