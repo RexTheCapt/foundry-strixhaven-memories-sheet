@@ -16,8 +16,10 @@ actor.
 ## Rules
 
 **Relationships.** Points run from -5 to +5, green when positive and red when negative. Boon/Bane is
-free text for the DM's choice at +2 or -2; nothing is applied automatically. The relationship is
-Friend, Neutral, Partner or Rival. Choosing Partner ticks Inspiration. Spend it as you would normal
+free text for the DM's choice at +2 or -2; no boon or bane is applied automatically. The relationship
+is Friend, Neutral, Partner or Rival. Changing the points sets it to Friend at +2 or more, Rival at -2
+or less and Neutral in between. Partner is only set or removed by hand. Choosing Partner ticks
+Inspiration. Spend it as you would normal
 inspiration, by unticking it.
 
 **Report cards.** Each entry holds 0, 1 or 2 d4s and any number of skills and tools. Each d4 can be

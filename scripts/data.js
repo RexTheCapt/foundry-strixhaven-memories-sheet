@@ -39,6 +39,8 @@ export const INSPIRING_RELATIONSHIP = "partner";
 
 export const MIN_POINTS = -5;
 export const MAX_POINTS = 5;
+/** Points at which someone becomes a friend, or with the sign reversed, a rival. */
+export const BOND_POINTS = 2;
 export const MAX_REPORT_DICE = 2;
 
 const count = length => Array.from({ length }, (_, i) => i + 1);
@@ -46,6 +48,20 @@ const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 const integer = value => Math.trunc(Number(value)) || 0;
 
 export const clampPoints = value => clamp(integer(value), MIN_POINTS, MAX_POINTS);
+
+/**
+ * The relationship which follows from a points change. Becoming or ceasing to be a partner is a manual
+ * decision, so a partner stays one.
+ * @param {number} points
+ * @param {string} current  The relationship before the change.
+ * @returns {string}
+ */
+export function relationshipForPoints(points, current) {
+  if ( current === INSPIRING_RELATIONSHIP ) return current;
+  if ( points >= BOND_POINTS ) return "friend";
+  if ( points <= -BOND_POINTS ) return "rival";
+  return "neutral";
+}
 
 /**
  * Reduce an extracurricular's name to what identifies it, so that for example

@@ -56,6 +56,11 @@
       "Available": "d4 available",
       "Report": "Report card: Year {year} #{number} ({left} left)",
       "Club": "{name}"
+    },
+    "Rest": {
+      "Report": "Report card d4s: Year {year} #{number}",
+      "Club": "Extracurricular d4",
+      "Inspiration": "Relationship inspiration"
     }
   }
 }

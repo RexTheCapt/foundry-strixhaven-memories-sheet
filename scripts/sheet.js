@@ -1,7 +1,7 @@
 import { getClubs, proficiencyOptions } from "./actor.js";
 import {
   clampPoints, clubKey, DEFAULT_CLUB_ROWS, DEFAULT_RELATIONSHIP_ROWS, INSPIRING_RELATIONSHIP, MODULE_ID,
-  parseProficiencies, prepareStrixhaven
+  parseProficiencies, prepareStrixhaven, relationshipForPoints
 } from "./data.js";
 import { memberUpdates } from "./members.js";
 
@@ -13,7 +13,11 @@ import { memberUpdates } from "./members.js";
 const field = (row, key) => row.querySelector(`[name$=".${key}"]`);
 
 function onPoints(input) {
-  if ( input.value !== "" ) input.value = clampPoints(input.value);
+  if ( input.value !== "" ) {
+    input.value = clampPoints(input.value);
+    const relationship = field(input.closest("tr"), "relationship");
+    relationship.value = relationshipForPoints(Number(input.value), relationship.value);
+  }
   input.classList.toggle("sm-positive", Number(input.value) > 0);
   input.classList.toggle("sm-negative", Number(input.value) < 0);
 }

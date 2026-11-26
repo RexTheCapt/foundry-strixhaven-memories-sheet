@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CLUB_NAMES, clubKey, MODULE_ID, parseProficiencies, prepareStrixhaven } from "../scripts/data.js";
-import { availableDice, longRestUpdates, spendUpdates } from "../scripts/dice.js";
+import {
+  CLUB_NAMES, clubKey, MODULE_ID, parseProficiencies, prepareStrixhaven, relationshipForPoints
+} from "../scripts/data.js";
+import { availableDice, longRestUpdates, restLabel, spendUpdates } from "../scripts/dice.js";
 
 const root = `flags.${MODULE_ID}`;
 const options = [
@@ -101,4 +103,24 @@ test("a long rest restores dice and sets inspiration for partners only", () => {
     [`${root}.relationships.r1.inspiration`]: true,
     [`${root}.relationships.r2.inspiration`]: false
   });
+});
+
+test("points decide between rival, neutral and friend", () => {
+  assert.deepEqual([-5, -2, -1, 0, 1, 2, 5].map(p => relationshipForPoints(p, "")),
+    ["rival", "rival", "neutral", "neutral", "neutral", "friend", "friend"]);
+  assert.equal(relationshipForPoints(0, "friend"), "neutral");
+});
+
+test("points never change a partner", () => {
+  assert.deepEqual([-5, 0, 5].map(p => relationshipForPoints(p, "partner")), ["partner", "partner", "partner"]);
+});
+
+test("every value a long rest changes has a name for the chat message", () => {
+  const paths = Object.keys(longRestUpdates(prepare(day)));
+  assert.ok(paths.length >= 4);
+  for ( const path of paths ) assert.ok(restLabel(path), path);
+  assert.deepEqual(restLabel(`${root}.reportCards.y2.e3.spent`),
+    { key: "STRIXHAVEN_MEMORIES.Rest.Report", data: { year: "2", number: "3" } });
+  assert.equal(restLabel("system.attributes.hp.value"), undefined);
+  assert.equal(restLabel("flags.other-module.relationships.r1.inspiration"), undefined);
 });

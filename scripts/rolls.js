@@ -1,6 +1,6 @@
 import { readSheet } from "./actor.js";
 import { MODULE_ID } from "./data.js";
-import { availableDice, longRestUpdates, spendUpdates } from "./dice.js";
+import { availableDice, longRestUpdates, restLabel, spendUpdates } from "./dice.js";
 
 /* Adds the Strixhaven d4s to dnd5e's skill and tool check dialogs, and restores them on a long rest. */
 
@@ -65,10 +65,16 @@ function onRest(actor, result) {
   Object.assign(result.updateData, longRestUpdates(readSheet(actor)));
 }
 
+function labelRestChange(path, options) {
+  const label = restLabel(path);
+  if ( label ) options.label = game.i18n.format(label.key, label.data);
+}
+
 export function registerRollHooks() {
   Hooks.on("renderSkillToolRollConfigurationDialog", offerDice);
   Hooks.on("dnd5e.postBuildRollConfig", addDice);
   Hooks.on("dnd5e.rollSkill", useDice);
   Hooks.on("dnd5e.rollToolCheck", useDice);
   Hooks.on("dnd5e.preRestCompleted", onRest);
+  Hooks.on("dnd5e.getUnknownAttributeLabel", labelRestChange);
 }

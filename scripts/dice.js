@@ -1,4 +1,4 @@
-import { INSPIRING_RELATIONSHIP } from "./data.js";
+import { INSPIRING_RELATIONSHIP, MODULE_ID } from "./data.js";
 
 /*
  * The daily resources: report card d4s, extracurricular d4s and relationship inspiration.
@@ -60,4 +60,28 @@ export function longRestUpdates(sheet) {
     if ( !!row.inspiration !== inspired ) updates[`${row.path}.inspiration`] = inspired;
   }
   return updates;
+}
+
+/*
+ * dnd5e's rest chat message lists every value the rest changed. These name the ones `longRestUpdates` changes.
+ * The names must not depend on the character: dnd5e reuses the first name it gets for a path.
+ */
+const REST_LABELS = [
+  [/^reportCards\.y(\d+)\.e(\d+)\.spent$/, "STRIXHAVEN_MEMORIES.Rest.Report"],
+  [/^extracurriculars\.[^.]+\.d4$/, "STRIXHAVEN_MEMORIES.Rest.Club"],
+  [/^relationships\.[^.]+\.inspiration$/, "STRIXHAVEN_MEMORIES.Rest.Inspiration"]
+];
+
+/**
+ * How to name one of the module's values.
+ * @param {string} path  Update path on the actor.
+ * @returns {{key: string, data: object}|undefined}  Localization key and its format data.
+ */
+export function restLabel(path) {
+  const prefix = `flags.${MODULE_ID}.`;
+  if ( !path.startsWith(prefix) ) return;
+  for ( const [pattern, key] of REST_LABELS ) {
+    const match = path.slice(prefix.length).match(pattern);
+    if ( match ) return { key, data: { year: match[1], number: match[2] } };
+  }
 }
