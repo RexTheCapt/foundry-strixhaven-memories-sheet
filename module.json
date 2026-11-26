@@ -1,0 +1,27 @@
+{
+  "id": "strixhaven-memories-sheet",
+  "title": "Strixhaven Memories Sheet",
+  "description": "Adds a Strixhaven tab to the D&D 5e character sheet with relationships, report cards, extracurriculars and a job.",
+  "version": "0.1.0",
+  "authors": [
+    { "name": "RexTheCapt", "url": "https://github.com/RexTheCapt" }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": { "minimum": "6.0.0", "verified": "6.0.5" }
+      }
+    ]
+  },
+  "esmodules": ["scripts/module.js"],
+  "styles": ["styles/strixhaven.css"],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ]
+}

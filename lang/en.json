@@ -1,0 +1,34 @@
+{
+  "STRIXHAVEN_MEMORIES": {
+    "Tab": "Strixhaven",
+    "Relationships": {
+      "Title": "Relationships",
+      "Name": "Name",
+      "Points": "Points",
+      "Relationship": "Relationship",
+      "Inspiration": "Inspiration",
+      "BoonBane": "Boon/Bane"
+    },
+    "ReportCards": {
+      "Title": "Report Cards",
+      "Year": "Year",
+      "Entry": "Entry",
+      "Rerolls": "Rerolls",
+      "D4s": "d4s",
+      "Skills": "Skills"
+    },
+    "Extracurriculars": {
+      "Title": "Extracurriculars",
+      "Name": "Name",
+      "D4": "d4",
+      "Skills": "Skills",
+      "Member": "Member"
+    },
+    "Job": {
+      "Title": "Job",
+      "Employer": "Employer",
+      "Job": "Job",
+      "Coworker": "Coworker"
+    }
+  }
+}
