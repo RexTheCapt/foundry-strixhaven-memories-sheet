@@ -1,11 +1,13 @@
-import { getClubs, proficiencyOptions, readSheet } from "./actor.js";
+import { getClubs, proficiencyOptions } from "./actor.js";
 import {
-  clampPoints, clubKey, DEFAULT_CLUB_ROWS, INSPIRING_RELATIONSHIP, MODULE_ID, parseProficiencies
+  clampPoints, clubKey, DEFAULT_CLUB_ROWS, DEFAULT_RELATIONSHIP_ROWS, INSPIRING_RELATIONSHIP, MODULE_ID,
+  parseProficiencies, prepareStrixhaven
 } from "./data.js";
+import { memberUpdates } from "./members.js";
 
 /*
  * Behaviour of the tab's fields. The `change` handlers run on the field itself, before the event reaches
- * the sheet's form, so everything they adjust is saved by the same form submission.
+ * the sheet's form, so what they adjust is saved by the same form submission.
  */
 
 const field = (row, key) => row.querySelector(`[name$=".${key}"]`);
@@ -20,17 +22,34 @@ function onRelationship(select) {
   field(select.closest("tr"), "inspiration").checked = select.value === INSPIRING_RELATIONSHIP;
 }
 
-/** Fill a row for the newly picked extracurricular, using the GM's list where it has an entry. */
-function onClub(select) {
-  const row = select.closest(".sm-row");
+/** The module's data as the form currently shows it, including edits which are still being saved. */
+function currentData(sheet) {
+  const { FormDataExtended } = foundry.applications.ux;
+  const typed = foundry.utils.expandObject(new FormDataExtended(sheet.form).object).flags?.[MODULE_ID];
+  const stored = foundry.utils.deepClone(sheet.actor._source.flags?.[MODULE_ID] ?? {});
+  return foundry.utils.mergeObject(stored, typed ?? {});
+}
+
+/**
+ * Fill a row for the newly picked extracurricular, using the GM's list where it has an entry, and add its
+ * members to the relationships. Everything is saved in one submission of the sheet.
+ */
+function onClub(sheet, select, event) {
+  event.stopPropagation(); // Submitted below instead of by the form's own change handling.
+  const path = select.name.replace(/\.name$/, "");
   const name = select.value;
   const entry = name ? getClubs().find(c => clubKey(c.name) === clubKey(name)) : undefined;
-  field(row, "d4").checked = !!name;
+  const updateData = { [`${path}.d4`]: !!name };
   // Skills and member belong to the previous club. A row that had no club keeps what the player filled in.
-  if ( !entry && !select.dataset.previous ) return;
-  field(row, "member").value = entry?.member ?? "";
-  // Set last: this element announces the change itself, which submits the form.
-  field(row, "proficiencies").value = parseProficiencies(entry?.skills, proficiencyOptions()).values;
+  if ( entry || select.dataset.previous ) {
+    updateData[`${path}.member`] = entry?.member ?? "";
+    updateData[`${path}.proficiencies`] = parseProficiencies(entry?.skills, proficiencyOptions()).values;
+  }
+  if ( entry?.member ) {
+    const rows = prepareStrixhaven(currentData(sheet));
+    Object.assign(updateData, memberUpdates(rows, entry.member, () => `r${foundry.utils.randomID()}`));
+  }
+  sheet.submit({ updateData });
 }
 
 function onDiceCount(select) {
@@ -43,16 +62,23 @@ function onDie(box) {
   field(cell, "spent").value = Array.from(cell.querySelectorAll(".sm-die")).filter(d => !d.checked).length;
 }
 
-async function addClub(actor) {
-  const order = readSheet(actor).extracurriculars.map(c => c.id);
-  await actor.update({ [`flags.${MODULE_ID}.extracurricularOrder`]: [...order, `c${foundry.utils.randomID()}`] });
+/** The two lists whose rows can be added and removed. */
+const LISTS = {
+  relationship: {
+    rows: "relationships", order: "relationshipOrder", defaults: DEFAULT_RELATIONSHIP_ROWS, prefix: "r"
+  },
+  club: { rows: "extracurriculars", order: "extracurricularOrder", defaults: DEFAULT_CLUB_ROWS, prefix: "c" }
+};
+
+async function addRow(actor, { order, defaults, prefix }) {
+  const ids = actor._source.flags?.[MODULE_ID]?.[order] ?? defaults;
+  await actor.update({ [`flags.${MODULE_ID}.${order}`]: [...ids, `${prefix}${foundry.utils.randomID()}`] });
 }
 
-async function removeClub(actor, id) {
+async function removeRow(actor, { rows, order, defaults }, id) {
   const data = actor._source.flags?.[MODULE_ID];
-  const order = data?.extracurricularOrder ?? DEFAULT_CLUB_ROWS;
-  const updates = { [`flags.${MODULE_ID}.extracurricularOrder`]: order.filter(o => o !== id) };
-  if ( data?.extracurriculars?.[id] ) updates[`flags.${MODULE_ID}.extracurriculars.${id}`] = _del;
+  const updates = { [`flags.${MODULE_ID}.${order}`]: (data?.[order] ?? defaults).filter(o => o !== id) };
+  if ( data?.[rows]?.[id] ) updates[`flags.${MODULE_ID}.${rows}.${id}`] = _del;
   await actor.update(updates);
 }
 
@@ -64,14 +90,16 @@ async function removeClub(actor, id) {
 export function activateTab(sheet, element) {
   const tab = element.querySelector(".tab.strixhaven-memories");
   if ( !tab ) return;
-  const on = (selector, event, handler) => {
-    for ( const target of tab.querySelectorAll(selector) ) target[`on${event}`] = () => handler(target);
+  const on = (selector, type, handler) => {
+    for ( const target of tab.querySelectorAll(selector) ) target[`on${type}`] = event => handler(target, event);
   };
   on(".sm-points", "change", onPoints);
   on(".sm-relationship", "change", onRelationship);
-  on(".sm-club-name", "change", onClub);
+  on(".sm-club-name", "change", (select, event) => onClub(sheet, select, event));
   on(".sm-dice-count", "change", onDiceCount);
   on(".sm-die", "change", onDie);
-  on(".sm-add-club", "click", () => addClub(sheet.actor));
-  on(".sm-remove-club", "click", button => removeClub(sheet.actor, button.dataset.id));
+  for ( const [type, list] of Object.entries(LISTS) ) {
+    on(`.sm-add-${type}`, "click", () => addRow(sheet.actor, list));
+    on(`.sm-remove-${type}`, "click", button => removeRow(sheet.actor, list, button.dataset.id));
+  }
 }

@@ -11,6 +11,7 @@
                     <th>{{ localize "STRIXHAVEN_MEMORIES.Relationships.Relationship" }}</th>
                     <th class="sm-center">{{ localize "STRIXHAVEN_MEMORIES.Relationships.Inspiration" }}</th>
                     <th>{{ localize "STRIXHAVEN_MEMORIES.Relationships.BoonBane" }}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -42,10 +43,21 @@
                         <textarea name="{{ path }}.boonBane" rows="1"
                                   aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.BoonBane' }} {{ number }}">{{ boonBane }}</textarea>
                     </td>
+                    <td class="sm-center">
+                        <button type="button" class="unbutton sm-remove-relationship" data-id="{{ id }}"
+                                data-tooltip-text="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Remove' }}"
+                                aria-label="{{ localize 'STRIXHAVEN_MEMORIES.Relationships.Remove' }} {{ number }}">
+                            <i class="fa-solid fa-trash" inert></i>
+                        </button>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
+        <button type="button" class="sm-add-relationship">
+            <i class="fa-solid fa-plus" inert></i>
+            <span>{{ localize "STRIXHAVEN_MEMORIES.Relationships.Add" }}</span>
+        </button>
     </div>
 
     {{!-- Report Cards --}}

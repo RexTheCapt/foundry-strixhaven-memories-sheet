@@ -1,11 +1,11 @@
 export const MODULE_ID = "strixhaven-memories-sheet";
 
 /** Row counts, matching the printed Strixhaven Memories page. */
-export const RELATIONSHIP_ROWS = 8;
 export const YEARS = 4;
 export const ENTRIES_PER_YEAR = 3;
 
-/** Extracurricular rows a character starts with; players can add and remove rows. */
+/** Rows a character starts with; players can add and remove relationship and extracurricular rows. */
+export const DEFAULT_RELATIONSHIP_ROWS = ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8"];
 export const DEFAULT_CLUB_ROWS = ["c1", "c2"];
 
 export const CLUB_NAMES = [
@@ -84,7 +84,7 @@ function prepareProficiencies(row, options) {
   };
 }
 
-function prepareRelationship(row = {}, n, path) {
+function prepareRelationship(row = {}, id, number, path) {
   const stored = (row.relationship ?? "").trim();
   const known = RELATIONSHIP_TYPES.find(t => t.value === stored.toLowerCase());
   const relationship = known?.value ?? stored;
@@ -95,7 +95,8 @@ function prepareRelationship(row = {}, n, path) {
   const points = hasPoints ? clampPoints(row.points) : null;
   return {
     ...row,
-    number: n,
+    id,
+    number,
     path,
     points,
     tone: points > 0 ? "sm-positive" : points < 0 ? "sm-negative" : "",
@@ -158,8 +159,8 @@ function prepareClubRows(data, options, clubs, root) {
 export function prepareStrixhaven(data = {}, { options = [], clubs = [] } = {}) {
   const root = `flags.${MODULE_ID}`;
   return {
-    relationships: count(RELATIONSHIP_ROWS).map(n =>
-      prepareRelationship(data.relationships?.[`r${n}`], n, `${root}.relationships.r${n}`)),
+    relationships: (data.relationshipOrder ?? DEFAULT_RELATIONSHIP_ROWS).map((id, index) =>
+      prepareRelationship(data.relationships?.[id], id, index + 1, `${root}.relationships.${id}`)),
     years: count(YEARS).map(year => ({
       number: year,
       entries: count(ENTRIES_PER_YEAR).map(n => ({

@@ -11,7 +11,9 @@
       "Friend": "Friend",
       "Neutral": "Neutral",
       "Partner": "Partner",
-      "Rival": "Rival"
+      "Rival": "Rival",
+      "Add": "Add relationship",
+      "Remove": "Remove relationship"
     },
     "ReportCards": {
       "Title": "Report Cards",

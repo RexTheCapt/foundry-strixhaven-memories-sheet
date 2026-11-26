@@ -118,6 +118,7 @@
     & th:nth-child(2) { width: 3.25rem; }
     & th:nth-child(3) { width: 6rem; }
     & th:nth-child(4) { width: 4.75rem; }
+    & th:nth-child(6) { width: 1.5rem; }
 
     & .sm-points { border-color: var(--sm-rule); font-weight: bold; }
     & .sm-points.sm-positive { color: var(--sm-positive); }
@@ -161,7 +162,7 @@
     & .sm-remove-club { justify-self: center; }
   }
 
-  & .sm-add-club { width: auto; margin-top: 0.25rem; }
+  & :is(.sm-add-relationship, .sm-add-club) { width: auto; margin-top: 0.25rem; }
 
   & .sm-captions,
   & .sm-job span {
